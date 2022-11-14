@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class RegisterActivity extends BasicActivity {
 
-    EditText nickname, email, phoneNum, password, username;
+    EditText nickname, email, phoneNum, password, username, checkPwd;
     Button btn_register;
 
     private FirebaseAuth auth;
@@ -41,6 +41,9 @@ public class RegisterActivity extends BasicActivity {
         password = findViewById(R.id.et_pwd);
         username = findViewById(R.id.et_name);
         btn_register = findViewById(R.id.btn_register);
+        checkPwd = findViewById(R.id.et_checkPwd);
+
+        // 비밀번호 재설정을 위해 필요
 
         auth = FirebaseAuth.getInstance();
 
@@ -52,13 +55,19 @@ public class RegisterActivity extends BasicActivity {
                 String txt_password = password.getText().toString();
                 String txt_phoneNum = phoneNum.getText().toString();
                 String txt_username = username.getText().toString();
+                String txt_checkPwd = checkPwd.getText().toString();
 
                 if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)
-                        || TextUtils.isEmpty(txt_nickname) || TextUtils.isEmpty(txt_phoneNum)){
+                        || TextUtils.isEmpty(txt_nickname) || TextUtils.isEmpty(txt_phoneNum) || TextUtils.isEmpty(txt_checkPwd)){
                     Toast.makeText(RegisterActivity.this,"빈칸을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else if (txt_password.length() < 6) {
                     Toast.makeText(RegisterActivity.this,"비밀번호를 6자리 이상 입력해주세요.", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                // 비밀번호 재확인을 위해 필요한 코드
+                else if (txt_password != txt_checkPwd){
+                    Toast.makeText(RegisterActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     register(txt_username, txt_email, txt_password, txt_phoneNum, txt_username);
                 }
             }
